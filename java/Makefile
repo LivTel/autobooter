@@ -1,5 +1,5 @@
-# Makefile -*- mode: Fundamental;-*-
-# $Header: /home/cjm/cvs/autobooter/java/Makefile,v 0.3 2001-07-11 15:28:49 cjm Exp $ 
+# Makefile
+# $Header: /home/cjm/cvs/autobooter/java/Makefile,v 0.4 2004-03-23 17:45:17 cjm Exp $ 
 include ../../Makefile.common
 include	../Makefile.common
 
@@ -7,18 +7,21 @@ BINDIR 		= $(AB_BIN_HOME)/java
 DOCSDIR 	= $(AB_DOC_HOME)/javadocs
 DOCFLAGS 	= -version -author -private
 
-SRCS 		= AutoBooter.java AutoBooterProcessThread.java AutoBooterProcessParentInterface.java \
-		AutoBooterStreamThread.java
+SRCS 		= AutoBooterProcessStatusInterface.java AutoBooterLogInterface.java AutoBooterConstants.java \
+		AutoBooterStatus.java AutoBooterStreamThread.java AutoBooterProcessThread.java AutoBooter.java 
 OBJS 		= $(SRCS:%.java=$(BINDIR)/%.class)
 DOCS 		= $(SRCS:%.java=$(DOCSDIR)/%.html)
 
-CONFIG_SRCS	= ltccd1.autobooter.properties ltccd2.autobooter.properties spectrograph.autobooter.properties
+CONFIG_SRCS	= ltccd1.autobooter.properties ltccd2.autobooter.properties ltccd3.autobooter.properties \
+		ftccd1.autobooter.properties spectrograph.autobooter.properties supircam1.autobooter.properties \
+		ftspec1.autobooter.properties
 CONFIG_OBJS	= $(CONFIG_SRCS:%.properties=$(BINDIR)/%.properties)
+SCRIPT_SRCS  	= ltccd1.S55autobooter ltccd2.S55autobooter ltccd3.S55autobooter ftccd1.S55autobooter \
+		supircam1.S55autobooter ftspec1.S55autobooter
+SCRIPT_OBJS	= $(SCRIPT_SRCS:%=$(BINDIR)/%)
 
-STARTUP_SCRIPT  = S55autobooter
+top: $(OBJS) config scripts docs
 
-top: $(OBJS) config startupscript docs
-	
 $(BINDIR)/%.class:%.java
 	$(JAVAC) $(JAVAC_OPTIONS) -d $(BINDIR) $<
 
@@ -27,10 +30,10 @@ config: $(CONFIG_OBJS)
 $(BINDIR)/%.properties: %.properties
 	$(CP) $< $@
 
-startupscript: $(BINDIR)/S55autobooter
+scripts: $(SCRIPT_OBJS)
 
-$(BINDIR)/S55autobooter: S55autobooter
-	$(CP) S55autobooter $@
+$(BINDIR)/%.S55autobooter: %.S55autobooter
+	$(CP) $< $@
 
 docs: $(DOCS)
 
@@ -53,6 +56,9 @@ backup: tidy
 
 #
 # $Log: not supported by cvs2svn $
+# Revision 0.3  2001/07/11 15:28:49  cjm
+# Config changes.
+#
 # Revision 0.2  2000/07/14 16:33:04  cjm
 # Backup.
 #
