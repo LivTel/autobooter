@@ -1,0 +1,336 @@
+\documentclass[10pt,a4paper]{article}
+\pagestyle{plain}
+\textwidth 16cm
+\textheight 21cm
+\oddsidemargin -0.5cm
+\topmargin 0cm
+
+\title{AutoBooter}
+\author{C. J. Mottram}
+\date{}
+\begin{document}
+\pagenumbering{arabic}
+\thispagestyle{empty}
+\maketitle
+\begin{abstract}
+The document overviews the AutoBooter utility, which is used to spawn
+various servers on deployment machines.
+\end{abstract}
+
+\centerline{\Large History}
+\begin{center}
+\begin{tabular}{|l|l|l|p{15em}|}
+\hline
+{\bf Version} & {\bf Author} & {\bf Date} & {\bf Notes} \\
+\hline
+0.1 &              C. J. Mottram & 08/08/00 & First draft \\
+\hline
+\end{tabular}
+\end{center}
+
+\newpage
+\tableofcontents
+\listoffigures
+\listoftables
+\newpage
+
+\section{Introduction}
+The AutoBooter is a utility process, written in Java. It is designed to be run during the startup process of the
+machine(s) it is running on, and is meant to keep running until the machine is shut down again. Only one AutoBooter
+process is meant to run on a machine.
+
+The AutoBooter is responsible for spawning one or more control process that need to run on the machine. The directory,
+name and command line of each process is specified in a configuration file. Each process is started in a separate 
+thread. The processes are monitored for completion. Depending on the return value of the spawned processes,
+they may be re-spawned, or if an engineering return value is returned, engineering mode is enabled, when the
+process leaves AutoBooter's control (AutoBooter stops re-spawning it). If a process keeps re-spawning too often
+(it keeps crashing or some hardware fault occurs) AutoBooter will stop re-spawning the process and write an
+error message to a specified log.
+
+\section{Execution Model}
+The AutoBooter is started from an initialisation script, normally put in the network run-levels of the 
+{\em init} daemon ({\em /etc/rc*.d} files). It does the following:
+\begin{itemize}
+\item Parses the arguments passed to the server. These can be used to set things like a non-default configuration file.
+\item Loads the configuration file.
+\item Goes through the list of processes to spawn in the configuration file. It starts a process thread for
+	each process.
+\end{itemize}
+
+\subsection{Per-Process execution}
+\label{sec:perprocessexecution}
+There is a process thread spawned for each process the AutoBooter must control. 
+We want it to control the process in the following manner:
+\begin{itemize}
+\item It must keep re-starting the process until a termination condition is met.
+\item If the process terminates with an engineering status, then AutoBooter should stop re-starting
+	the process and terminate this thread. This process then leaves control of the AutoBooter,
+	and becomes controlled by the engineer.
+\item If the process keeps terminating with an error condition, more than a certain number of times in a given
+	time period, then the AutoBooter should give up trying to re-spawn the process (the process is failing
+	to start because of some error).
+\end{itemize}
+This is achieved using the following pseudo-code:
+\begin{itemize}
+\item Sets up the command line strings and other variables used. This includes initialising the {\em retry start time}
+	to the current time, and the {\em retry index} to zero.
+\item Enters a loop, which is terminated when a termination condition is met:
+     \begin{itemize}
+     \item Executes the command line.
+     \item Starts two stream threads, connected to the spawned process's output and error streams. These streams
+	are re-directed to AutoBooter's output and error stream. These threads are needed to stop the
+	spawned processes blocking on output/error messages.
+     \item Waits for the spawned process to terminate, by blocking so AutoBooter takes up no processor time.
+     \item If the process's return value was not a re-spawn status (e.g. the process returned a non-zero 
+	return value - an error occurred) the {\em retry index} is incremented.
+     \item If the {\em process end time} minus the {\em retry start time} is longer than the {\em retry time} 
+	(an AutoBooter default), the {\em retry index} and {\em retry start time} are reset 
+	(to zero and the current time).
+     \item If the {\em retry index} is greater than the {\em retry count}, the loop terminates 
+	(the process has returned too many errors is too little a time, i.e. it is failing to start correctly).
+     \item If the processes return status is the {\em engineering status} (an AutoBooter default), then the 
+	process has been killed in such a way that the user wants it go into engineering mode, so the loop
+	is terminated.
+     \end{itemize}
+\item The thread then terminates.
+\end{itemize}
+
+\section{Class Hierarchy}
+The following classes are used to implement the above behavior.
+
+\subsection{AutoBooter}
+This is the main start class of the AutoBooter process. The main method performs the following:
+\begin{itemize}
+\item Calls the {\em parseArgs} method to parse command line arguments (potentially affecting the
+	configuration file used).
+\item Calls the {\em init} method.
+\item Calls the {\em run} method.
+\end{itemize}
+
+\subsubsection{{\em init} method}
+This method creates a {\em properties} object, containing the contents of the configuration filename.
+If the configuration filename cannot be found or a file error occurs, this is thrown back to
+main to cause AutoBooter to terminate with an error.
+
+\subsubsection{{\em run} method}
+This looks through the loaded properties, looking for processes to start. For each process, it spawns a
+{\em AutoBooterProcessThread} to deal with that process. The process's directory, command line and
+retry count are all set from the loaded properties. A reference back to this class is passed 
+for the process thread to request data from this class. This class implements {\em AutoBooterProcessParentInterface}
+to abstract the process thread/parent thread interface away from this specific class.
+
+Note the {\em run} method terminates as soon as all the threads are spawned and started, but because 
+{\em main} does not contain a {\em System.exit} and the process threads are spawned AutoBooter does not terminate.
+
+There is also a series of routines in this class to get data values from the properties such as
+the {\em re-spawn status}, {\em engineering status} and {\em retry time}. These are retrieved from
+the loaded properties.
+
+\subsection{AutoBooterProcessParentInterface}
+This is the interface between the main AutoBooter class and the per-process thread. The AutoBooter 
+class implements this interface. It contains the following method declarations:
+\begin{itemize}
+\item {\em getReSpawnStatus}. Routine to return the status the process an instance of 
+	AutoBooterProcessThread is controlling
+	 will return when it needs re-spawning.
+\item {\em getEngineeringStatus}. Routine to return the status the process an instance of AutoBooterProcessThread 
+	is controlling will return when it wants to go into engineering mode. 
+	This means the AutoBooterProcessThread for this process will terminate, and not re-start the process.
+\item {\em getRetryTime}. Routine to return the retry time. If the instance of AutoBooterProcessThread re-spawns the
+	process it is controlling more than {\em retry count} times in this time, the thread assumes the
+	the process is continually failing and stops trying to re-start it.
+\end{itemize}
+
+\subsection{AutoBooterProcessThread}
+This class extends {\em java.lang.Thread}, and implements the pseudo-code mentioned in 
+Section \ref{sec:perprocessexecution}. Note the process is not run directly, it is executed via a shell command:
+\verb'/bin/sh -c ( cd <directory> ; <command line> )' where \verb'<'directory\verb'>' and 
+\verb'<'command line\verb'>' are read from the properties file. This is done because Java has no way of
+directly specifying the directory to start a process in.
+
+\subsection{AutoBooterStreamThread}
+This class extends {\em java.lang.Thread}. One instance of this class is spawned for each stream that needs
+to be read by the program. Each process has an output and error stream that needs to be read.
+The thread waits for input on the stream, and re-broadcasts it to the specified stream.
+
+\section{Directory Structure}
+The AutoBooter process follows the standard Liverpool Telescope directory structure \cite{bib:ltplan}.
+A general overview is shown in Figure \ref{fig:dirtree}.
+
+\setlength{\unitlength}{1in}
+\begin{figure}[!h]
+	\begin{center}
+		\begin{picture}(7.0,4.5)(0.0,0.0)
+			\put(0,0){\special{psfile=autobooter_dirtree.eps   hscale=50 vscale=50}}
+		\end{picture}
+	\end{center}
+	\caption{\em AutoBooter directory tree.}
+	\label{fig:dirtree}
+\end{figure}
+
+\subsection{src/autobooter}
+This is the top level source directory for the AutoBooter package. In here are the java and latex 
+sub-directories. The {\em Makefile} is the top level makefile for this package, and calls the 
+{\em Makefile}s in the java and latex sub-directories. There is also a {\em Makefile.common}
+file in this directory, which contains some common definitions of directories used
+by all the makefiles in this package.
+
+\subsubsection{src/autobooter/java}
+This directory contains the java source files for AutoBooter. The {\em Makefile} builds the
+java sources and puts them in the bin directory tree. 
+
+The {\em RCS} sub-directory is used 
+in combination with the {\em rcs} program for version control of the source code.
+
+The {\em *.autobooter.properties} files are the configuration files for the AutoBooter.
+All the configuration files are copied to the {\em bin} sub-tree, and then the relevant 
+file is soft linked as {\em autobooter.properties}, which is the default filename AutoBooter
+uses to get it configuration file.
+
+The {\em S55autobooter} file is a startup script that is also copied to the {\em bin}
+sub-tree, so that it gets released to deployment machines. It should be copied into the
+relevant {\em /etc/rc*.d} directories, to automatically start the AutoBooter process
+then the machine is turned on.
+
+The {\em *.autobooter.properties} and {\em S55autobooter} files should be edited in this directory
+and {\em make} called to copy them to the {\em bin} sub-tree to be released, so that a copy of the
+latest source files is kept.
+
+\subsubsection{src/autobooter/latex}
+This contains the sources for the \LaTeX documentation of this sub-system. This includes the
+sources for this document you are reading. There is a {\em Makefile} in this directory that builds the
+sources and copies them to the {\em /public\_html/latex} sub-directory, so that the web-server picks them up.
+
+\subsection{bin/autobooter}
+This directory is the root for all the binaries generated by this package.
+
+\subsubsection{bin/autobooter/java}
+This contains the class files generated from the Java sources. The AutoBooter is run from this directory.
+
+The released version of the AutoBooter startup script ({\em S55autobooter}) is also placed here. On a 
+deployment machine this should be copied into {\em /etc/rc*.d/} directories to start and stop the AutoBooter
+program. 
+
+All the {\em *.autobooter.properties} files are also copied from the source directory to this directory.
+The relevant file should be soft linked to {\em autobooter.properties}, the default configuration filename
+AutoBooter looks for. This can be done using a command like: 
+\verb'ln -s ${HOST}.autobooter.properties autobooter.properties'. The configuration filename AutoBooter uses
+can be overridden in the startup script by the {\em -config} option (see Section \ref{sec:commandlinearguments}).
+
+\subsection{public\_html/autobooter}
+This is the root directory for all documentation generated by the AutoBooter sub-system. The {\em index.html}
+file points to the \LaTeX and Javadoc documentation.
+
+\subsection{public\_html/autobooter/javadocs}
+This directory contains all the documentation generated by Javadoc from the Java sources in the source directory.
+
+\subsection{public\_html/autobooter/latex}
+This directory contains all the documentation generated from the \LaTeX sources. This is the documentation you are now
+reading.
+
+\section{Command Line Arguments}
+\label{sec:commandlinearguments}
+The following output is produced from \verb'java AutoBooter -help':
+\begin{verbatim}
+AutoBooter Help:
+AutoBooter starts a series of processes specified in a configuration file.
+It re-spawns them when they terminate.
+Arguments are:
+        -[co]|[config] <filename> - Location of the configuration properties file.
+        -h[elp] - show this message.
+\end{verbatim}
+
+Autobooter writes various messages to it's standard output and standard error streams during the course of operation.
+The spawned process's standard output and standard error streams are re-directed to the AutoBooter's equivalent
+streams, although the command line for each spawned process can include a re-direct to file. 
+It is therefore a good idea to redirect AutoBooter's standard output and error streams to file
+to log the operations the AutoBooter performs. The startup script does this.
+
+\section{Configuration file}
+The configuration file is a standard Java property file. The keywords AutoBooter uses is documented in
+Table \ref{tab:configkeyword}. Note some keywords are per-process, so the keywords has a 
+{\em \verb'<'number\verb'>'} tagged
+on the end to give the keywords for that process number. The process numbers start at zero, and the 
+AutoBooter will find and start threads for numbers from zero to the last non-null value for
+{\em autobooter.process.name.\verb'<'number\verb'>'}.
+
+\begin{table}
+\begin{center}
+\begin{tabular}{|l|l|p{12em}|l|p{17em}|}
+\hline
+{\bf Keyword} & {\bf Type} & {\bf Notes} \\ \hline
+autobooter.process.status.engineering   & Integer & The kill value+128 to go into engineering mode.\\ \hline
+autobooter.process.retry\_time		& Integer (milliseconds) & The {\em retry time} for all spawned processes.\\ \hline
+autobooter.process.name.\verb'<'number\verb'>'	& String & The name of process \verb'<'number\verb'>' to spawn.\\ \hline
+autobooter.process.directory.\verb'<'number\verb'>'	& String & The directory to change to before running the command line for process \verb'<'number\verb'>'.\\ \hline
+autobooter.process.command\_line.\verb'<'number\verb'>'& String & The command line to start process \verb'<'number\verb'>'.\\ \hline
+autobooter.process.retry\_count.\verb'<'number\verb'>'& Integer & The number of times to try to re-spawn process \verb'<'number\verb'>' it it returns a failure code e.g. {\em retry\_count}.\\ \hline
+\end{tabular}
+\end{center}
+\caption{\em Configuration file keywords.}
+\label{tab:configkeyword} 
+\end{table}
+
+An example configuration file is given below:
+\begin{verbatim}
+#
+# AutoBooter configuration file.
+#
+
+# When exiting, spawned processes return an exit value.
+# This exit value is interpreted by the AutoBooter.
+autobooter.process.status.respawn	=0
+# 15 is kill -SIGTERM = 143
+# 1 is hangup -SIGHUP = 129
+autobooter.process.status.engineering	=129
+autobooter.process.retry_time		=300000
+
+#Processes
+
+# Ccs
+autobooter.process.name.0		=Ccs
+autobooter.process.directory.0		=/space/home/dev/bin/ccs/java
+autobooter.process.command_line.0	=/usr/bin/nice -5 java Ccs -l 3 1> output.txt 2>&1
+autobooter.process.retry_count.0	=16
+
+# DpRt
+autobooter.process.name.1		=DpRt
+autobooter.process.directory.1		=/space/home/dev/bin/dprt/java
+autobooter.process.command_line.1	=java DpRt -l 3 1> output.txt 2>&1
+autobooter.process.retry_count.1	=16
+
+# ccsd
+autobooter.process.name.2		=ccsd
+autobooter.process.directory.2		=/space/home/dev/bin/ccs/util
+autobooter.process.command_line.2	=./ccsd 1> output.txt 2>&1
+autobooter.process.retry_count.2	=8
+\end{verbatim}
+
+Note the {\em autobooter.process.status.engineering} property is set to 129 in this example. When a (Java)
+process is killed it returns the signal number plus 128. This means to put a spawned process into 
+engineering mode it should be killed with signal one, in this case SIGHUP. This is done as follows:
+\begin{verbatim}
+kill -SIGHUP <process id>
+\end{verbatim}
+This will tell AutoBooter not to respawn the process with the specified id.
+
+\section{Suggested Improvements}
+\begin{itemize}
+\item When the AutoBooter is told to stop (it is killed, probably when changing run-levels),
+	it does not currently kill it's spawned processes.
+\item If the AutoBooter crashes, it is not currently re-spawned. If it was re-spawned in some way
+	(as per a daemon startup script on Linux) it would need a mechanism for finding processes
+	spawned by the last AutoBooter invocation and controlling them in some way (i.e. killing them). 
+\item If one of AutoBooter's processes is put into engineering mode (so a problem can be fixed with it,
+	for example) there is no way to tell AutoBooter to re-start a new thread for that process and
+	re-start monitoring it (come out of engineering mdoe). The machine has to be re-booted for
+	this to happen at the moment.
+\end{itemize}
+
+\begin{thebibliography}{99}
+\addcontentsline{toc}{section}{Bibliography}
+\bibitem{bib:ltplan}{\bf LT Software Development at the ARI}
+I.A. Steele, C.J. Mottram. {\em http://ltccd1.livjm.ac.uk/\verb'~'dev/latex/plan.ps}
+\end{thebibliography}
+
+\end{document}
