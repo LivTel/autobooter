@@ -1,5 +1,5 @@
 // AutoBooter.java -*- mode: Fundamental;-*-
-// $Header: /home/cjm/cvs/autobooter/java/AutoBooter.java,v 0.2 2000-07-06 13:50:56 cjm Exp $
+// $Header: /home/cjm/cvs/autobooter/java/AutoBooter.java,v 0.3 2000-08-01 11:04:29 cjm Exp $
 
 import java.lang.*;
 import java.io.*;
@@ -10,14 +10,14 @@ import java.util.*;
  * This program is designed to be booted at startup, and starts a set of process which it
  * monitors and re-starts.
  * @author Chris Mottram
- * @version $Revision: 0.2 $
+ * @version $Revision: 0.3 $
  */
 public class AutoBooter implements AutoBooterProcessParentInterface
 {
 	/**
 	 * Revision Control System id string, showing the version of the Class.
 	 */
-	public final static String RCSID = new String("$Id: AutoBooter.java,v 0.2 2000-07-06 13:50:56 cjm Exp $");
+	public final static String RCSID = new String("$Id: AutoBooter.java,v 0.3 2000-08-01 11:04:29 cjm Exp $");
 	/**
 	 * Defaults filename for the configuration property file.
 	 */
@@ -78,6 +78,8 @@ public class AutoBooter implements AutoBooterProcessParentInterface
 		i = 0;
 		done = false;
 		threadList = new Vector();
+		System.out.println(this.getClass().getName()+":run:started using configuration:"+
+			configurationFilename);
 		while(done == false)
 		{
 			processName = getProperty("autobooter.process.name."+i);
@@ -274,6 +276,9 @@ public class AutoBooter implements AutoBooterProcessParentInterface
 }
 //
 // $Log: not supported by cvs2svn $
+// Revision 0.2  2000/07/06 13:50:56  cjm
+// *** empty log message ***
+//
 // Revision 0.1  2000/07/06 10:26:21  cjm
 // initial revision.
 //
