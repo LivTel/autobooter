@@ -1,5 +1,5 @@
 # Makefile
-# $Header: /home/cjm/cvs/autobooter/java/Makefile,v 0.6 2004-05-24 18:22:13 cjm Exp $ 
+# $Header: /home/cjm/cvs/autobooter/java/Makefile,v 0.7 2004-07-06 18:13:46 cjm Exp $ 
 include ../../Makefile.common
 include	../Makefile.common
 
@@ -15,11 +15,11 @@ DOCS 		= $(SRCS:%.java=$(DOCSDIR)/%.html)
 CONFIG_SRCS	= ltccd1.autobooter.properties ltccd2.autobooter.properties ltccd3.autobooter.properties \
 		ftccd1.autobooter.properties ftccd2.autobooter.properties \
 		spectrograph.autobooter.properties supircam1.autobooter.properties \
-		ftspec1.autobooter.properties spectrograph.autobooter.properties
+		ftspec1.autobooter.properties nuview1.autobooter.properties spectrograph.autobooter.properties
 CONFIG_OBJS	= $(CONFIG_SRCS:%.properties=$(BINDIR)/%.properties)
 SCRIPT_SRCS  	= ltccd1.S55autobooter ltccd2.S55autobooter ltccd3.S55autobooter \
 		ftccd1.S55autobooter ftccd2.S55autobooter \
-		supircam1.S55autobooter ftspec1.S55autobooter spectrograph.S55autobooter
+		supircam1.S55autobooter ftspec1.S55autobooter spectrograph.S55autobooter nuview1.S55autobooter
 SCRIPT_OBJS	= $(SCRIPT_SRCS:%=$(BINDIR)/%)
 
 top: $(OBJS) config scripts docs
@@ -58,6 +58,9 @@ backup: tidy
 
 #
 # $Log: not supported by cvs2svn $
+# Revision 0.6  2004/05/24 18:22:13  cjm
+# Added ftccd2.
+#
 # Revision 0.5  2004/04/19 14:48:23  cjm
 # Added spectrograph configs.
 #
