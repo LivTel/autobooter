@@ -1,4 +1,4 @@
-# $Header: /home/cjm/cvs/autobooter/latex/Makefile,v 0.1 2000-08-08 11:21:38 cjm Exp $
+# $Header: /home/cjm/cvs/autobooter/latex/Makefile,v 0.2 2000-10-03 16:39:48 cjm Exp $
 
 include ../../Makefile.common
 include ../Makefile.common
@@ -27,7 +27,7 @@ $(DVIOBJS): $(EPSOBJS)
 	$(LATEX) $<
 
 %.eps: %.fig
-	$(FIG2DEV) -L ps $< $@
+	$(FIG2DEV) $(FIG2DEV_OPTIONS) $< $@
 
 depend:
 	echo "NO depend rule for latex files."
@@ -49,4 +49,7 @@ checkout:
 
 #
 # $Log: not supported by cvs2svn $
+# Revision 0.1  2000/08/08 11:21:38  cjm
+# initial revision.
+#
 #
