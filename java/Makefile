@@ -1,5 +1,5 @@
 # Makefile -*- mode: Fundamental;-*-
-# $Header: /home/cjm/cvs/autobooter/java/Makefile,v 0.1 2000-07-06 10:31:39 cjm Exp $ 
+# $Header: /home/cjm/cvs/autobooter/java/Makefile,v 0.2 2000-07-14 16:33:04 cjm Exp $ 
 include ../../Makefile.common
 include	../Makefile.common
 
@@ -15,8 +15,10 @@ DOCS 		= $(SRCS:%.java=$(DOCSDIR)/%.html)
 CONFIG_SRCS	= ltccd1.autobooter.properties ltccd2.autobooter.properties
 CONFIG_OBJS	= $(CONFIG_SRCS:%.properties=$(BINDIR)/%.properties)
 
-top: $(OBJS) config docs
+STARTUP_SCRIPT  = S55autobooter
 
+top: $(OBJS) config startupscript docs
+	
 $(BINDIR)/%.class:%.java
 	$(JAVAC) $(JAVAC_OPTIONS) -d $(BINDIR) $<
 
@@ -24,6 +26,11 @@ config: $(CONFIG_OBJS)
 
 $(BINDIR)/%.properties: %.properties
 	$(CP) $< $@
+
+startupscript: $(BINDIR)/S55autobooter
+
+$(BINDIR)/S55autobooter: S55autobooter
+	$(CP) S55autobooter $@
 
 docs: $(DOCS)
 
@@ -46,4 +53,7 @@ backup: tidy
 
 #
 # $Log: not supported by cvs2svn $
+# Revision 0.1  2000/07/06 10:31:39  cjm
+# initial revision.
+#
 #
