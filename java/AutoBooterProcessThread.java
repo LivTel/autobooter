@@ -1,5 +1,5 @@
-// AutoBooterProcessThread.java -*- mode: Fundamental;-*-
-// $Header: /home/cjm/cvs/autobooter/java/AutoBooterProcessThread.java,v 0.2 2000-08-01 11:04:47 cjm Exp $
+// AutoBooterProcessThread.java
+// $Header: /home/cjm/cvs/autobooter/java/AutoBooterProcessThread.java,v 0.3 2004-03-05 15:23:03 cjm Exp $
 
 import java.lang.*;
 import java.io.*;
@@ -11,14 +11,14 @@ import java.util.*;
  * It re-spawns the process until the retry-count is exhausted in the retry-time, or the
  * process returns an engineering return status.
  * @author Chris Mottram
- * @version $Revision: 0.2 $
+ * @version $Revision: 0.3 $
  */
 public class AutoBooterProcessThread extends Thread
 {
 	/**
 	 * Revision Control System id string, showing the version of the Class.
 	 */
-	public final static String RCSID = new String("$Id: AutoBooterProcessThread.java,v 0.2 2000-08-01 11:04:47 cjm Exp $");
+	public final static String RCSID = new String("$Id: AutoBooterProcessThread.java,v 0.3 2004-03-05 15:23:03 cjm Exp $");
 	/**
 	 * The name of the process this thread is controlling.
 	 */
@@ -28,10 +28,15 @@ public class AutoBooterProcessThread extends Thread
 	 */
 	private int processNumber = 0;
 	/**
-	 * The parent class that spawned this thread.
-	 * @see AutoBooterProcessParentInterface
+	 * The class containing status information this class needs.
+	 * @see AutoBooterProcessStatusInterface
 	 */
-	private AutoBooterProcessParentInterface parent = null;
+	private AutoBooterProcessStatusInterface status = null;
+	/**
+	 * An object reference implementing a log interface.
+	 * @see AutoBooterLogInterface
+	 */
+	private AutoBooterLogInterface logger = null;
 	/**
 	 * The directory to run the command from.
 	 */
@@ -73,12 +78,22 @@ public class AutoBooterProcessThread extends Thread
 	}
 
 	/**
-	 * Method to set the parent object instance.
-	 * @param p The parent object reference.
+	 * Method to set the status object instance.
+	 * @param s The status object reference.
 	 */
-	public void setParent(AutoBooterProcessParentInterface p)
+	public void setStatus(AutoBooterProcessStatusInterface s)
 	{
-		parent = p;
+		status = s;
+	}
+
+	/**
+	 * Method to set the log object instance.
+	 * @param l An object reference implementing the log interface.
+	 * @see #logger
+	 */
+	public void setLogger(AutoBooterLogInterface l)
+	{
+	       logger = l;
 	}
 
 	/**
@@ -122,24 +137,24 @@ public class AutoBooterProcessThread extends Thread
 	 * @see #outputStreamThread
 	 * @see #errorStreamThread
 	 * @see #retryCount
-	 * @see #parent
+	 * @see #status
 	 * @see AutoBooterStreamThread
-	 * @see AutoBooter#getRetryTime
-	 * @see AutoBooter#getReSpawnStatus
-	 * @see AutoBooter#getEngineeringStatus
+	 * @see AutoBooterProcessStatusInterface#getRetryTime
+	 * @see AutoBooterProcessStatusInterface#getReSpawnStatus
+	 * @see AutoBooterProcessStatusInterface#getEngineeringStatus
 	 */
 	public void run()
 	{
 		Process process;
 		Runtime runtime;
 		String[] commandList = null;
-		int status,retryIndex;
+		int processStatus,retryIndex;
 		long retryStartTime;
 		long endTime;
 		boolean done;
 
 		done = false;
-		status = 0;
+		processStatus = 0;
 		retryIndex = 0;
 		retryStartTime = System.currentTimeMillis();
 		endTime = 0;
@@ -152,50 +167,54 @@ public class AutoBooterProcessThread extends Thread
 		{
 			try
 			{
-				System.out.println(this.getClass().getName()+":run:"+name+" started:try "+retryIndex+
-					" of "+retryCount+":\n\t"+
+				logger.log(AutoBooterConstants.AUTOBOOTER_LOG_LEVEL_COMMANDS,
+					   this.getClass().getName()+":run:"+name+" started:try "+retryIndex+
+					   " of "+retryCount+":\n\t"+
 					commandList[0]+" "+commandList[1]+" "+commandList[2]);
 				process = runtime.exec(commandList);
 				outputStreamThread = new AutoBooterStreamThread(name,process.getInputStream(),
 					System.out);
+				outputStreamThread.setLogger(logger);
 				outputStreamThread.start();
 				errorStreamThread = new AutoBooterStreamThread(name,process.getErrorStream(),
 					System.err);
+				errorStreamThread.setLogger(logger);
 				errorStreamThread.start();
-				status = process.waitFor();
+				processStatus = process.waitFor();
 				endTime = System.currentTimeMillis();
-				System.out.println(this.getClass().getName()+":run:"+name+" returned "+status+".");
+				logger.log(AutoBooterConstants.AUTOBOOTER_LOG_LEVEL_COMMANDS,this.getClass().getName()+
+					   ":run:"+name+" returned "+processStatus+".");
 			}
 			catch(Exception e)
 			{
-				System.err.println(this.getClass().getName()+":run:"+name+":"+e);
-				status = 0;
+				logger.error(this.getClass().getName()+":run:"+name,e);
+				processStatus = 0;
 			}
 			finally
 			{
-				if(parent.getReSpawnStatus() != status)
+				if(status.getReSpawnStatus() != processStatus)
 					retryIndex++;
 			// we keep running out of memory due to threads being spawned.
 			// This tries to reclaim memory.
 				System.gc();
 			}
-			if((endTime-retryStartTime) > parent.getRetryTime())
+			if((endTime-retryStartTime) > status.getRetryTime())
 			{
-				System.out.println(this.getClass().getName()+":run:"+name+
-					":Retry Count Reset:"+retryIndex);
+				logger.log(AutoBooterConstants.AUTOBOOTER_LOG_LEVEL_COMMANDS,this.getClass().getName()+
+					   ":run:"+name+":Retry Count Reset:"+retryIndex);
 				retryIndex = 0;
 				retryStartTime = System.currentTimeMillis();
 			}
 			if(retryIndex > retryCount)
 			{
-				System.err.println(this.getClass().getName()+":run:"+name+
+				logger.error(this.getClass().getName()+":run:"+name+
 					":Retry Count exceeded:terminating.");
 				done = true;
 			}
-			if(parent.getEngineeringStatus() == status)
+			if(status.getEngineeringStatus() == processStatus)
 			{
-				System.out.println(this.getClass().getName()+":run:"+name+
-					":Engineering Mode enabled:terminating.");
+				logger.log(AutoBooterConstants.AUTOBOOTER_LOG_LEVEL_COMMANDS,this.getClass().getName()+
+					   ":run:"+name+":Engineering Mode enabled:terminating.");
 				done = true;
 			}
 		}// while(!done)
@@ -203,6 +222,9 @@ public class AutoBooterProcessThread extends Thread
 }
 //
 // $Log: not supported by cvs2svn $
+// Revision 0.2  2000/08/01 11:04:47  cjm
+// More descriptive startup message.
+//
 // Revision 0.1  2000/07/06 10:27:03  cjm
 // initial revision.
 //
