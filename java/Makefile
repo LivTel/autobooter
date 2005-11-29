@@ -1,5 +1,5 @@
 # Makefile
-# $Header: /home/cjm/cvs/autobooter/java/Makefile,v 0.9 2004-10-13 19:56:19 cjm Exp $ 
+# $Header: /home/cjm/cvs/autobooter/java/Makefile,v 0.10 2005-11-29 15:23:57 cjm Exp $ 
 include ../../Makefile.common
 include	../Makefile.common
 
@@ -15,11 +15,12 @@ DOCS 		= $(SRCS:%.java=$(DOCSDIR)/%.html)
 CONFIG_SRCS	= ltccd1.autobooter.properties ltccd2.autobooter.properties ltccd3.autobooter.properties \
 		ftccd1.autobooter.properties ftccd2.autobooter.properties \
 		spectrograph.autobooter.properties supircam1.autobooter.properties supircam2.autobooter.properties \
-		ftspec1.autobooter.properties nuview1.autobooter.properties spectrograph.autobooter.properties
+		ftspec1.autobooter.properties nuview1.autobooter.properties ratcam1.autobooter.properties 
 CONFIG_OBJS	= $(CONFIG_SRCS:%.properties=$(BINDIR)/%.properties)
 SCRIPT_SRCS  	= ltccd1.autobooter ltccd2.autobooter ltccd3.autobooter \
 		ftccd1.autobooter ftccd2.autobooter \
-		supircam1.autobooter supircam2.autobooter ftspec1.autobooter spectrograph.autobooter nuview1.autobooter
+		supircam1.autobooter supircam2.autobooter ftspec1.autobooter spectrograph.autobooter \
+		nuview1.autobooter ratcam1.autobooter
 SCRIPT_OBJS	= $(SCRIPT_SRCS:%=$(BINDIR)/%)
 
 top: $(OBJS) config scripts docs
@@ -58,6 +59,9 @@ backup: tidy
 
 #
 # $Log: not supported by cvs2svn $
+# Revision 0.9  2004/10/13 19:56:19  cjm
+# Added supircam2.
+#
 # Revision 0.8  2004/08/03 09:58:06  cjm
 # S55autobooter files now just .autobooter.
 #
