@@ -1,5 +1,5 @@
 // AutoBooterProcessThread.java
-// $Header: /home/cjm/cvs/autobooter/java/AutoBooterProcessThread.java,v 0.3 2004-03-05 15:23:03 cjm Exp $
+// $Header: /home/cjm/cvs/autobooter/java/AutoBooterProcessThread.java,v 0.4 2005-12-06 17:09:03 cjm Exp $
 
 import java.lang.*;
 import java.io.*;
@@ -11,14 +11,14 @@ import java.util.*;
  * It re-spawns the process until the retry-count is exhausted in the retry-time, or the
  * process returns an engineering return status.
  * @author Chris Mottram
- * @version $Revision: 0.3 $
+ * @version $Revision: 0.4 $
  */
 public class AutoBooterProcessThread extends Thread
 {
 	/**
 	 * Revision Control System id string, showing the version of the Class.
 	 */
-	public final static String RCSID = new String("$Id: AutoBooterProcessThread.java,v 0.3 2004-03-05 15:23:03 cjm Exp $");
+	public final static String RCSID = new String("$Id: AutoBooterProcessThread.java,v 0.4 2005-12-06 17:09:03 cjm Exp $");
 	/**
 	 * The name of the process this thread is controlling.
 	 */
@@ -211,7 +211,7 @@ public class AutoBooterProcessThread extends Thread
 					":Retry Count exceeded:terminating.");
 				done = true;
 			}
-			if(status.getEngineeringStatus() == processStatus)
+			if(status.isEngineeringStatus(processStatus))
 			{
 				logger.log(AutoBooterConstants.AUTOBOOTER_LOG_LEVEL_COMMANDS,this.getClass().getName()+
 					   ":run:"+name+":Engineering Mode enabled:terminating.");
@@ -222,6 +222,9 @@ public class AutoBooterProcessThread extends Thread
 }
 //
 // $Log: not supported by cvs2svn $
+// Revision 0.3  2004/03/05 15:23:03  cjm
+// Added logging.
+//
 // Revision 0.2  2000/08/01 11:04:47  cjm
 // More descriptive startup message.
 //

@@ -1,5 +1,5 @@
 // AutoBooterStatus.java
-// $Header: /home/cjm/cvs/autobooter/java/AutoBooterStatus.java,v 1.1 2004-03-05 15:23:03 cjm Exp $
+// $Header: /home/cjm/cvs/autobooter/java/AutoBooterStatus.java,v 1.2 2005-12-06 17:08:56 cjm Exp $
 import java.lang.*;
 import java.io.*;
 import java.util.*;
@@ -9,7 +9,7 @@ import ngat.util.logging.FileLogHandler;
 /**
  * This class holds status information for the Autobooter program.
  * @author Chris Mottram
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  * @see AutoBooterProcessStatusInterface
  */
 public class AutoBooterStatus implements AutoBooterProcessStatusInterface
@@ -17,7 +17,7 @@ public class AutoBooterStatus implements AutoBooterProcessStatusInterface
 	/**
 	 * Revision Control System id string, showing the version of the Class.
 	 */
-	public final static String RCSID = new String("$Id: AutoBooterStatus.java,v 1.1 2004-03-05 15:23:03 cjm Exp $");
+	public final static String RCSID = new String("$Id: AutoBooterStatus.java,v 1.2 2005-12-06 17:08:56 cjm Exp $");
 	/**
 	 * Defaults filename for the configuration property file.
 	 */
@@ -279,26 +279,41 @@ public class AutoBooterStatus implements AutoBooterProcessStatusInterface
 	}
 
 	/**
-	 * Routine to return the status the process an instance of AutoBooterProcessThread is controlling
-	 * will return when it wants to go into engineering mode. This means the AutoBooterProcessThread for
+	 * Routine to return whether the specified status returned by a process an instance of AutoBooterProcessThread 
+	 * is controlling is in the set of engineering statii, that cause this process to go into engineering mode. 
+	 * This means the AutoBooterProcessThread for
 	 * this process will terminate, and not re-start the process.
-	 * @return A status, returned from the process under control, that means the thread should <b>stop</b>
-	 * 	re-spawning the process.
+	 * @param status The status integer returned by the process.
+	 * @return A boolean, if true the process will not be respawned.
 	 */
-	public int getEngineeringStatus()
+	public boolean isEngineeringStatus(int status)
 	{
-		int retval;
+		int index,retval;
+		boolean done;
 
-		try
+		index = 0;
+		done = false;
+		while(done == false)
 		{
-			retval = getPropertyInteger("autobooter.process.status.engineering");
+			try
+			{
+				retval = getPropertyInteger("autobooter.process.status.engineering."+index);
+				if(retval == status)
+					return true;
+				else
+					index++;
+			}
+			catch(NumberFormatException e)
+			{
+				if(index < 1)
+				{
+					System.err.println(this.getClass().getName()+
+							   ":getEngineeringStatus:Property not found.");
+				}
+				done = true;
+			}
 		}
-		catch(NumberFormatException e)
-		{
-			System.err.println(this.getClass().getName()+":getEngineeringStatus:Property not found.");
-			retval = 15;
-		}
-		return retval;
+		return false;
 	}
 
 	/**
@@ -326,4 +341,7 @@ public class AutoBooterStatus implements AutoBooterProcessStatusInterface
 }
 //
 // $Log: not supported by cvs2svn $
+// Revision 1.1  2004/03/05 15:23:03  cjm
+// Initial revision
+//
 //

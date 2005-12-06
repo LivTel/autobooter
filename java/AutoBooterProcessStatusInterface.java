@@ -1,5 +1,5 @@
 // AutoBooterProcessStatusInterface.java
-// $Header: /home/cjm/cvs/autobooter/java/AutoBooterProcessStatusInterface.java,v 1.1 2004-03-05 15:23:03 cjm Exp $
+// $Header: /home/cjm/cvs/autobooter/java/AutoBooterProcessStatusInterface.java,v 1.2 2005-12-06 17:09:06 cjm Exp $
 
 import java.lang.*;
 
@@ -9,7 +9,7 @@ import java.lang.*;
  * This class was originally AutoBooterProcessParentInterface v0.1.
  * @see AutoBooterProcessThread
  * @author Chris Mottram
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public interface AutoBooterProcessStatusInterface
 {
@@ -21,13 +21,14 @@ public interface AutoBooterProcessStatusInterface
 	 */
 	public int getReSpawnStatus();
 	/**
-	 * Routine to return the status the process an instance of AutoBooterProcessThread is controlling
-	 * will return when it wants to go into engineering mode. This means the AutoBooterProcessThread for
+	 * Routine to return whether the specified status returned by a process an instance of AutoBooterProcessThread 
+	 * is controlling is in the set of engineering statii, that cause this process to go into engineering mode. 
+	 * This means the AutoBooterProcessThread for
 	 * this process will terminate, and not re-start the process.
-	 * @return A status, returned from the process under control, that means the thread should <b>stop</b>
-	 * 	re-spawning the process.
+	 * @param status The status integer returned by the process.
+	 * @return A boolean, if true the process will not be respawned.
 	 */
-	public int getEngineeringStatus();
+	public boolean isEngineeringStatus(int status);
 	/**
 	 * Routine to return the retry time. If the instance of AutoBooterProcessThread respawns the
 	 * process it is controlling more than retry_count times in this time, the thread assumes the
@@ -38,6 +39,9 @@ public interface AutoBooterProcessStatusInterface
 }
 //
 // $Log: not supported by cvs2svn $
+// Revision 1.1  2004/03/05 15:23:03  cjm
+// Initial revision
+//
 // Revision 0.1  2000/07/06 10:27:03  cjm
 // initial revision.
 //
