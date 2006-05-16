@@ -1,5 +1,24 @@
+/*   
+    Copyright 2006, Astrophysics Research Institute, Liverpool John Moores University.
+
+    This file is part of AutoBooter.
+
+    AutoBooter is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    AutoBooter is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with AutoBooter; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
 // AutoBooterProcessThread.java
-// $Header: /home/cjm/cvs/autobooter/java/AutoBooterProcessThread.java,v 0.5 2005-12-06 17:16:53 cjm Exp $
+// $Header: /home/cjm/cvs/autobooter/java/AutoBooterProcessThread.java,v 0.6 2006-05-16 16:20:22 cjm Exp $
 
 import java.lang.*;
 import java.io.*;
@@ -11,14 +30,14 @@ import java.util.*;
  * It re-spawns the process until the retry-count is exhausted in the retry-time, or the
  * process returns an engineering return status.
  * @author Chris Mottram
- * @version $Revision: 0.5 $
+ * @version $Revision: 0.6 $
  */
 public class AutoBooterProcessThread extends Thread
 {
 	/**
 	 * Revision Control System id string, showing the version of the Class.
 	 */
-	public final static String RCSID = new String("$Id: AutoBooterProcessThread.java,v 0.5 2005-12-06 17:16:53 cjm Exp $");
+	public final static String RCSID = new String("$Id: AutoBooterProcessThread.java,v 0.6 2006-05-16 16:20:22 cjm Exp $");
 	/**
 	 * The name of the process this thread is controlling.
 	 */
@@ -222,6 +241,9 @@ public class AutoBooterProcessThread extends Thread
 }
 //
 // $Log: not supported by cvs2svn $
+// Revision 0.5  2005/12/06 17:16:53  cjm
+// Fix comments.
+//
 // Revision 0.4  2005/12/06 17:09:03  cjm
 // Swapped getEngineeringStatus for isEngineeringStatus, to allow
 // multiple process return values to stop re-spawning a process.

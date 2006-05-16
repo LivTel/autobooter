@@ -1,5 +1,24 @@
+/*   
+    Copyright 2006, Astrophysics Research Institute, Liverpool John Moores University.
+
+    This file is part of AutoBooter.
+
+    AutoBooter is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    AutoBooter is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with AutoBooter; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
 // AutoBooter.java
-// $Header: /home/cjm/cvs/autobooter/java/AutoBooter.java,v 0.4 2004-03-05 15:23:03 cjm Exp $
+// $Header: /home/cjm/cvs/autobooter/java/AutoBooter.java,v 0.5 2006-05-16 16:20:20 cjm Exp $
 
 import java.lang.*;
 import java.io.*;
@@ -14,14 +33,14 @@ import ngat.util.logging.*;
  * This program is designed to be booted at startup, and starts a set of process which it
  * monitors and re-starts.
  * @author Chris Mottram
- * @version $Revision: 0.4 $
+ * @version $Revision: 0.5 $
  */
 public class AutoBooter implements AutoBooterLogInterface
 {
 	/**
 	 * Revision Control System id string, showing the version of the Class.
 	 */
-	public final static String RCSID = new String("$Id: AutoBooter.java,v 0.4 2004-03-05 15:23:03 cjm Exp $");
+	public final static String RCSID = new String("$Id: AutoBooter.java,v 0.5 2006-05-16 16:20:20 cjm Exp $");
 	/**
 	 * Filename of the configuration property file used by the program.
 	 * Initialised to DEFAULT_CONFIGURATION_FILENAME, can be set as a command line argument.
@@ -501,6 +520,10 @@ public class AutoBooter implements AutoBooterLogInterface
 }
 //
 // $Log: not supported by cvs2svn $
+// Revision 0.4  2004/03/05 15:23:03  cjm
+// Added logging.
+// Removed getProperty methods and put into Status object.
+//
 // Revision 0.3  2000/08/01 11:04:29  cjm
 // Added startup log message.
 //

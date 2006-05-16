@@ -1,5 +1,24 @@
+/*   
+    Copyright 2006, Astrophysics Research Institute, Liverpool John Moores University.
+
+    This file is part of AutoBooter.
+
+    AutoBooter is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    AutoBooter is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with AutoBooter; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
 // AutoBooterStatus.java
-// $Header: /home/cjm/cvs/autobooter/java/AutoBooterStatus.java,v 1.2 2005-12-06 17:08:56 cjm Exp $
+// $Header: /home/cjm/cvs/autobooter/java/AutoBooterStatus.java,v 1.3 2006-05-16 16:20:23 cjm Exp $
 import java.lang.*;
 import java.io.*;
 import java.util.*;
@@ -9,7 +28,7 @@ import ngat.util.logging.FileLogHandler;
 /**
  * This class holds status information for the Autobooter program.
  * @author Chris Mottram
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  * @see AutoBooterProcessStatusInterface
  */
 public class AutoBooterStatus implements AutoBooterProcessStatusInterface
@@ -17,7 +36,7 @@ public class AutoBooterStatus implements AutoBooterProcessStatusInterface
 	/**
 	 * Revision Control System id string, showing the version of the Class.
 	 */
-	public final static String RCSID = new String("$Id: AutoBooterStatus.java,v 1.2 2005-12-06 17:08:56 cjm Exp $");
+	public final static String RCSID = new String("$Id: AutoBooterStatus.java,v 1.3 2006-05-16 16:20:23 cjm Exp $");
 	/**
 	 * Defaults filename for the configuration property file.
 	 */
@@ -341,6 +360,10 @@ public class AutoBooterStatus implements AutoBooterProcessStatusInterface
 }
 //
 // $Log: not supported by cvs2svn $
+// Revision 1.2  2005/12/06 17:08:56  cjm
+// Swapped getEngineeringStatus for isEngineeringStatus, to allow
+// multiple process return values to stop re-spawning a process.
+//
 // Revision 1.1  2004/03/05 15:23:03  cjm
 // Initial revision
 //
