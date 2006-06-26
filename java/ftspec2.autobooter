@@ -1,0 +1,57 @@
+#!/bin/sh
+#
+# Liverpool John Moores University
+#
+#ident	"$Id: ftspec2.autobooter,v 1.1 2006-06-26 15:47:58 cjm Exp $"
+
+AUTOBOOTER_HOME=/icc/bin/autobooter/java
+AUTOBOOTER_CONF=/icc/bin/autobooter/java/autobooter.properties
+AUTOBOOTER_PIDFILE=/icc/bin/autobooter/java/autobooter.pid
+if [ ! -f ${AUTOBOOTER_CONF} ]; then
+	echo "AutoBooter: Configuration filename ${AUTOBOOTER_CONF} not found."
+	exit 0
+fi
+
+# Some .sh equivalent stuff of environment in
+# lt_environment.csh
+PATH=${PATH}":/usr/java/jdk1.5.0_01/bin/java"
+CLASSPATH="."
+list=`ls /icc/bin/javalib/*.jar`
+for i in $list; do
+    CLASSPATH=${CLASSPATH}":"$i
+done
+
+HOSTTYPE=i386-linux
+LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/icc/bin/lib/${HOSTTYPE}
+export HOSTTYPE
+export PATH
+export CLASSPATH 
+export LD_LIBRARY_PATH
+
+case "$1" in
+start)
+	/bin/rm -f ${AUTOBOOTER_PIDFILE}
+	cd ${AUTOBOOTER_HOME}
+	echo "AutoBooter start."
+	java AutoBooter -co ${AUTOBOOTER_CONF} 1> /icc/log/autobooter_output.txt 2>&1 &
+	echo $! > ${AUTOBOOTER_PIDFILE}
+	;;
+stop)
+	echo "AutoBooter stop."
+	PID=`cat ${AUTOBOOTER_PIDFILE}`
+	kill ${PID}
+	;;
+*)
+	echo "Usage: $0 {start|stop}"
+	exit 1
+	;;
+esac
+
+if [ $? != 0 ]; then
+	echo "$status"
+	exit 1
+fi
+exit 0
+#
+# $Log: not supported by cvs2svn $
+#
