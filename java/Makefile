@@ -1,5 +1,5 @@
 # Makefile
-# $Header: /home/cjm/cvs/autobooter/java/Makefile,v 0.12 2006-07-20 15:38:50 cjm Exp $ 
+# $Header: /home/cjm/cvs/autobooter/java/Makefile,v 0.13 2006-08-09 15:08:06 cjm Exp $ 
 include ../../Makefile.common
 include	../Makefile.common
 
@@ -32,7 +32,7 @@ $(BINDIR)/%.class:%.java
 config: $(CONFIG_OBJS)
 
 $(BINDIR)/%.properties: %.properties
-	$(CP) $< $@
+	$(CP) -f $< $@
 
 scripts: $(SCRIPT_OBJS)
 
@@ -60,6 +60,9 @@ backup: tidy
 
 #
 # $Log: not supported by cvs2svn $
+# Revision 0.12  2006/07/20 15:38:50  cjm
+# Added autoguider1 config.
+#
 # Revision 0.11  2006/06/26 15:48:58  cjm
 # Added FTSpecS config.
 #
