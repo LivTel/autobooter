@@ -1,5 +1,5 @@
 # Makefile
-# $Header: /home/cjm/cvs/autobooter/java/Makefile,v 0.13 2006-08-09 15:08:06 cjm Exp $ 
+# $Header: /home/cjm/cvs/autobooter/java/Makefile,v 0.14 2006-11-20 19:07:43 cjm Exp $ 
 include ../../Makefile.common
 include	../Makefile.common
 
@@ -48,7 +48,7 @@ checkout:
 	$(CO) $(CO_OPTIONS) $(SRCS)
 
 checkin:
-	-$(CI) $(CI_OPTIONS) $(SRCS)
+	-$(CI) $(CI_OPTIONS) $(SRCS) $(SCRIPT_SRCS)
 
 clean: tidy
 	-$(RM) $(RM_OPTIONS) $(OBJS)
@@ -60,6 +60,9 @@ backup: tidy
 
 #
 # $Log: not supported by cvs2svn $
+# Revision 0.13  2006/08/09 15:08:06  cjm
+# Changed cp option.
+#
 # Revision 0.12  2006/07/20 15:38:50  cjm
 # Added autoguider1 config.
 #
