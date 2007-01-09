@@ -1,0 +1,10 @@
+# $Header: /home/cjm/cvs/autobooter/Makefile.common,v 1.1 2007-01-09 15:00:29 cjm Exp $
+
+AB_HOME			=	autobooter
+AB_SRC_HOME		= 	$(LT_SRC_HOME)/$(AB_HOME)
+AB_BIN_HOME		= 	$(LT_BIN_HOME)/$(AB_HOME)
+AB_DOC_HOME		= 	$(LT_DOC_HOME)/$(AB_HOME)
+
+#
+# $Log: not supported by cvs2svn $
+#
