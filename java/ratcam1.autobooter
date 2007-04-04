@@ -2,7 +2,7 @@
 #
 # Liverpool John Moores University
 #
-#ident	"$Id: ratcam1.autobooter,v 1.1 2005-11-29 15:43:47 cjm Exp $"
+#ident	"$Id: ratcam1.autobooter,v 1.2 2007-04-04 13:55:28 cjm Exp $"
 
 AUTOBOOTER_HOME=/icc/bin/autobooter/java
 AUTOBOOTER_CONF=/icc/bin/autobooter/java/autobooter.properties
@@ -32,6 +32,9 @@ case "$1" in
 start)
 	/bin/rm -f ${AUTOBOOTER_PIDFILE}
 	cd ${AUTOBOOTER_HOME}
+	echo "AutoBooter: Close any running session."
+	/usr/bin/wget -O SESSION.Close "http://192.168.1.41/SESSION?Close"
+	cat SESSION.Close
 	echo "AutoBooter start."
 	java AutoBooter -co ${AUTOBOOTER_CONF} 1> /icc/log/autobooter_output.txt 2>&1 &
 	echo $! > ${AUTOBOOTER_PIDFILE}
