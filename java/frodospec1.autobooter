@@ -2,7 +2,8 @@
 #
 # Liverpool John Moores University
 #
-#ident	"$Id: frodospec1.autobooter,v 1.1 2007-07-19 11:27:27 cjm Exp $"
+#ident	"$Id: frodospec1.autobooter,v 1.2 2007-07-19 11:28:06 cjm Exp $"
+# $Header: /home/cjm/cvs/autobooter/java/frodospec1.autobooter,v 1.2 2007-07-19 11:28:06 cjm Exp $
 
 AUTOBOOTER_HOME=/icc/bin/autobooter/java
 AUTOBOOTER_CONF=/icc/bin/autobooter/java/autobooter.properties
@@ -51,3 +52,6 @@ if [ $? != 0 ]; then
 	exit 1
 fi
 exit 0
+#
+# $Log: not supported by cvs2svn $
+#
