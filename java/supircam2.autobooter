@@ -2,11 +2,13 @@
 #
 # Liverpool John Moores University
 #
-#ident	"$Id: supircam2.autobooter,v 1.1 2006-11-20 19:07:49 cjm Exp $"
+#ident	"$Id: supircam2.autobooter,v 1.2 2007-09-27 14:56:12 cjm Exp $"
 
 AUTOBOOTER_HOME=/icc/bin/autobooter/java
 AUTOBOOTER_CONF=/icc/bin/autobooter/java/autobooter.properties
 AUTOBOOTER_PIDFILE=/icc/bin/autobooter/java/autobooter.pid
+AUTOBOOTER_ENVIRONMENT_LOGFILE=/icc/log/autobooter_environment_output.txt
+AUTOBOOTER_OUTPUT_LOGFILE=/icc/log/autobooter_output.txt
 if [ ! -f ${AUTOBOOTER_CONF} ]; then
 	echo "AutoBooter: Configuration filename ${AUTOBOOTER_CONF} not found."
 	exit 0
@@ -20,20 +22,27 @@ list=`ls /icc/bin/javalib/*.jar`
 for i in $list; do
     CLASSPATH=${CLASSPATH}":"$i
 done
-# set HOSTTYPE to i386-linux: default appears to be 'i686' on supircam1!
-#HOSTTYPE=i386-linux
+# set HOSTTYPE to i386-linux: default appears to be 'i386' on supircam2!
+HOSTTYPE=i386-linux
+# If LD_LIBRARY_PATH does not exist, initialise it.
+if [ ! -z "${LD_LIBRARY_PATH}" ]; then
+    LD_LIBRARY_PATH="."
+fi
 LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/icc/bin/lib/${HOSTTYPE}
 export HOSTTYPE
 export PATH
 export CLASSPATH 
 export LD_LIBRARY_PATH
+echo "Date: "`/bin/date` >> ${AUTOBOOTER_ENVIRONMENT_LOGFILE}
+echo "CLASSPATH: ${CLASSPATH}" >> ${AUTOBOOTER_ENVIRONMENT_LOGFILE}
+echo "LD_LIBRARY_PATH: ${LD_LIBRARY_PATH}" >> ${AUTOBOOTER_ENVIRONMENT_LOGFILE}
 
 case "$1" in
 start)
 	/bin/rm -f ${AUTOBOOTER_PIDFILE}
 	cd ${AUTOBOOTER_HOME}
 	echo "AutoBooter start."
-	java AutoBooter -co ${AUTOBOOTER_CONF} 1> /icc/log/autobooter_output.txt 2>&1 &
+	java AutoBooter -co ${AUTOBOOTER_CONF} 1> ${AUTOBOOTER_OUTPUT_LOGFILE} 2>&1 &
 	echo $! > ${AUTOBOOTER_PIDFILE}
 	;;
 stop)
