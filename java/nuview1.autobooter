@@ -2,7 +2,7 @@
 #
 # Liverpool John Moores University
 #
-#ident	"$Id: nuview1.autobooter,v 1.1 2006-11-20 19:07:49 cjm Exp $"
+#ident	"$Id: nuview1.autobooter,v 1.2 2007-12-05 16:56:03 cjm Exp $"
 
 AUTOBOOTER_HOME=/icc/bin/autobooter/java
 AUTOBOOTER_CONF=/icc/bin/autobooter/java/autobooter.properties
@@ -14,7 +14,7 @@ fi
 
 # Some .sh equivalent stuff of environment in
 # lt_environment.csh
-PATH=${PATH}":/usr/java/j2sdk1.4.2_05/bin"
+PATH=${PATH}":/usr/java/j2sdk1.4.2_03/bin"
 CLASSPATH="."
 list=`ls /icc/bin/javalib/*.jar`
 for i in $list; do
