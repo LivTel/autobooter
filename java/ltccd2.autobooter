@@ -1,8 +1,8 @@
-#!/sbin/sh
+#!/bin/bash
 #
 # Liverpool John Moores University
 #
-#ident	"$Id: ltccd2.autobooter,v 1.1 2006-11-20 19:07:49 cjm Exp $"
+#ident	"$Id: ltccd2.autobooter,v 1.2 2008-10-07 14:58:21 cjm Exp $"
 
 AUTOBOOTER_HOME=/icc/bin/autobooter/java
 AUTOBOOTER_CONF=/icc/bin/autobooter/java/autobooter.properties
@@ -37,6 +37,42 @@ LD_LIBRARY_PATH=/icc/bin/lib/${HOSTTYPE}
 export HOSTTYPE
 export CLASSPATH 
 export LD_LIBRARY_PATH
+
+#
+# Log rolling
+#
+function log_roll ( )
+{
+    if [ $# != 1 ]; then
+	echo "log_roll : illegal number of parameters:$#"
+	return 0
+    fi
+    base_filename=$1
+    i=4
+    while [ $i > -1 ]; do
+	filename=${base_filename}.${i}
+	if [ -e ${filename} ]; then
+	    next_index=`echo "(${i} +1)" |bc`
+	    next_filename=${base_filename}.${next_index}
+	    if [ -e ${next_filename} ]; then
+		echo "Removing ${next_filename}."
+		/bin/rm ${next_filename}
+	    fi
+	    echo "Moving ${filename} to ${next_filename}."
+	    /bin/mv ${filename} ${next_filename}
+	fi
+	i=`echo "(${i} -1)" |bc`
+    done
+    filename=${base_filename}.0
+    echo "Moving ${base_filename} to ${filename}."
+    /bin/mv ${base_filename} ${filename}
+    return 0
+}
+
+(log_roll "/icc/log/autobooter_output.txt" )
+(log_roll "/icc/log/ccs_output.txt" )
+(log_roll "/icc/log/dprt_output.txt" )
+
 
 case "$1" in
 start)
