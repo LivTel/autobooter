@@ -1,5 +1,5 @@
 # Makefile
-# $Header: /home/cjm/cvs/autobooter/java/Makefile,v 0.17 2008-01-11 15:08:20 cjm Exp $ 
+# $Header: /home/cjm/cvs/autobooter/java/Makefile,v 0.18 2008-12-01 15:33:30 cjm Exp $ 
 include ../../Makefile.common
 include	../Makefile.common
 
@@ -17,13 +17,13 @@ CONFIG_SRCS	= ltccd1.autobooter.properties ltccd2.autobooter.properties ltccd3.a
 		spectrograph.autobooter.properties supircam1.autobooter.properties supircam2.autobooter.properties \
 		ftspec1.autobooter.properties ftspec2.autobooter.properties \
 		nuview1.autobooter.properties ratcam1.autobooter.properties autoguider1.autobooter.properties \
-		frodospec1.autobooter.properties estar6.autobooter.properties
+		frodospec1.autobooter.properties estar6.autobooter.properties datared.autobooter.properties 
 CONFIG_OBJS	= $(CONFIG_SRCS:%.properties=$(BINDIR)/%.properties)
 SCRIPT_SRCS  	= ltccd1.autobooter ltccd2.autobooter ltccd3.autobooter \
 		ftccd1.autobooter ftccd2.autobooter \
 		supircam1.autobooter supircam2.autobooter ftspec1.autobooter ftspec2.autobooter \
 		spectrograph.autobooter nuview1.autobooter ratcam1.autobooter autoguider1.autobooter \
-		frodospec1.autobooter estar6.autobooter
+		frodospec1.autobooter estar6.autobooter datared.autobooter
 SCRIPT_OBJS	= $(SCRIPT_SRCS:%=$(BINDIR)/%)
 
 top: $(OBJS) config scripts docs
@@ -62,6 +62,9 @@ backup: tidy
 
 #
 # $Log: not supported by cvs2svn $
+# Revision 0.17  2008/01/11 15:08:20  cjm
+# Added estar6 for FrodoSpec testing.
+#
 # Revision 0.16  2007/07/19 11:28:23  cjm
 # Added frodospec1 configs.
 #
