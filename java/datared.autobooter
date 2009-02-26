@@ -2,8 +2,8 @@
 #
 # Liverpool John Moores University
 #
-#ident	"$Id: datared.autobooter,v 1.1 2008-12-01 15:32:57 cjm Exp $
-# $Header: /home/cjm/cvs/autobooter/java/datared.autobooter,v 1.1 2008-12-01 15:32:57 cjm Exp $
+#ident	"$Id: datared.autobooter,v 1.2 2009-02-26 14:44:55 cjm Exp $
+# $Header: /home/cjm/cvs/autobooter/java/datared.autobooter,v 1.2 2009-02-26 14:44:55 cjm Exp $
 
 AUTOBOOTER_HOME=/dprt/bin/autobooter/java
 AUTOBOOTER_CONF=/dprt/bin/autobooter/java/autobooter.properties
@@ -15,7 +15,7 @@ fi
 
 # Some .sh equivalent stuff of environment in
 # lt_environment.csh
-PATH=${PATH}":/usr/java/jdk1.5.0_10/bin"
+PATH=${PATH}":/usr/java/j2sdk1.4.6_06/bin"
 CLASSPATH="."
 list=`ls /dprt/bin/javalib/*.jar`
 for i in $list; do
@@ -53,4 +53,7 @@ fi
 exit 0
 #
 # $Log: not supported by cvs2svn $
+# Revision 1.1  2008/12/01 15:32:57  cjm
+# Initial revision
+#
 #
