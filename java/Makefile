@@ -1,5 +1,5 @@
 # Makefile
-# $Header: /home/cjm/cvs/autobooter/java/Makefile,v 0.18 2008-12-01 15:33:30 cjm Exp $ 
+# $Header: /home/cjm/cvs/autobooter/java/Makefile,v 0.19 2009-02-26 14:46:48 cjm Exp $ 
 include ../../Makefile.common
 include	../Makefile.common
 
@@ -39,7 +39,7 @@ $(BINDIR)/%.properties: %.properties
 scripts: $(SCRIPT_OBJS)
 
 $(BINDIR)/%.autobooter: %.autobooter
-	$(CP) $< $@
+	$(CP) -f $< $@
 
 docs: $(DOCS)
 
@@ -62,6 +62,9 @@ backup: tidy
 
 #
 # $Log: not supported by cvs2svn $
+# Revision 0.18  2008/12/01 15:33:30  cjm
+# Added datared config files.
+#
 # Revision 0.17  2008/01/11 15:08:20  cjm
 # Added estar6 for FrodoSpec testing.
 #
