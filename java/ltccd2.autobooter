@@ -2,7 +2,7 @@
 #
 # Liverpool John Moores University
 #
-#ident	"$Id: ltccd2.autobooter,v 1.3 2008-10-07 15:03:54 cjm Exp $"
+#ident	"$Id: ltccd2.autobooter,v 1.4 2010-10-07 13:25:14 cjm Exp $"
 
 AUTOBOOTER_HOME=/icc/bin/autobooter/java
 AUTOBOOTER_CONF=/icc/bin/autobooter/java/autobooter.properties
@@ -52,7 +52,7 @@ export LD_LIBRARY_PATH
 #    while [ $i > -1 ]; do
 #	filename=${base_filename}.${i}
 #	if [ -e ${filename} ]; then
-#	    next_index=`echo "(${i} +1)" |bc`
+#	    next_index=`echo "(${i} +1)" |/bin/bc`
 #	    next_filename=${base_filename}.${next_index}
 #	    if [ -e ${next_filename} ]; then
 #		echo "Removing ${next_filename}."
@@ -61,7 +61,7 @@ export LD_LIBRARY_PATH
 #	    echo "Moving ${filename} to ${next_filename}."
 #	    /bin/mv ${filename} ${next_filename}
 #	fi
-#	i=`echo "(${i} -1)" |bc`
+#	i=`echo "(${i} -1)" |/bin/bc`
 #    done
 #    filename=${base_filename}.0
 #    echo "Moving ${base_filename} to ${filename}."
