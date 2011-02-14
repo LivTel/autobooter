@@ -2,7 +2,10 @@
 #
 # Liverpool John Moores University
 #
-#ident	"$Id: ringo2.autobooter,v 1.1 2010-10-07 13:25:14 cjm Exp $"
+#ident	"$Id: ringo2.autobooter,v 1.2 2011-02-14 11:16:39 cjm Exp $"
+# chkconfig: 35 99 01
+# description: Autobooter robotic software startup
+# processname: Autobooter
 
 AUTOBOOTER_HOME=/icc/bin/autobooter/java
 AUTOBOOTER_CONF=/icc/bin/autobooter/java/autobooter.properties
