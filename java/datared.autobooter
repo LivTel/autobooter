@@ -2,9 +2,10 @@
 #
 # Liverpool John Moores University
 #
-#ident	"$Id: datared.autobooter,v 1.3 2009-02-26 15:28:40 cjm Exp $
-# $Header: /home/cjm/cvs/autobooter/java/datared.autobooter,v 1.3 2009-02-26 15:28:40 cjm Exp $
-
+#ident	"$Id: datared.autobooter,v 1.4 2011-05-24 14:05:17 cjm Exp $
+# $Header: /home/cjm/cvs/autobooter/java/datared.autobooter,v 1.4 2011-05-24 14:05:17 cjm Exp $
+# Try to get the DpRt to leave core dumps
+ulimit -c unlimited
 AUTOBOOTER_HOME=/dprt/bin/autobooter/java
 AUTOBOOTER_CONF=/dprt/bin/autobooter/java/autobooter.properties
 AUTOBOOTER_PIDFILE=/dprt/bin/autobooter/java/autobooter.pid
@@ -53,6 +54,9 @@ fi
 exit 0
 #
 # $Log: not supported by cvs2svn $
+# Revision 1.3  2009/02/26 15:28:40  cjm
+# Second attempt at fixing Java path.
+#
 # Revision 1.2  2009/02/26 14:44:55  cjm
 # Changed java path to that which is installed.
 #
