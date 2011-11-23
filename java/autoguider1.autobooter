@@ -2,7 +2,11 @@
 #
 # Liverpool John Moores University
 #
-#ident	"$Id: autoguider1.autobooter,v 1.1 2006-07-20 15:38:30 cjm Exp $"
+#ident	"$Id: autoguider1.autobooter,v 1.2 2011-11-23 11:05:33 cjm Exp $"
+# $Header: /home/cjm/cvs/autobooter/java/autoguider1.autobooter,v 1.2 2011-11-23 11:05:33 cjm Exp $
+# chkconfig: 35 99 01
+# description: Autobooter robotic software startup
+# processname: Autobooter
 
 AUTOBOOTER_HOME=/icc/bin/autobooter/java
 AUTOBOOTER_CONF=/icc/bin/autobooter/java/autobooter.properties
@@ -27,6 +31,8 @@ export HOSTTYPE
 export PATH
 export CLASSPATH 
 export LD_LIBRARY_PATH
+# Enable autoguider to core dump
+ulimit -c unlimited
 
 case "$1" in
 start)
