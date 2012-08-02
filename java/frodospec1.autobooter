@@ -2,8 +2,8 @@
 #
 # Liverpool John Moores University
 #
-#ident	"$Id: frodospec1.autobooter,v 1.6 2011-02-14 11:16:19 cjm Exp $"
-# $Header: /home/cjm/cvs/autobooter/java/frodospec1.autobooter,v 1.6 2011-02-14 11:16:19 cjm Exp $
+#ident	"$Id: frodospec1.autobooter,v 1.7 2012-08-02 10:52:42 cjm Exp $"
+# $Header: /home/cjm/cvs/autobooter/java/frodospec1.autobooter,v 1.7 2012-08-02 10:52:42 cjm Exp $
 # chkconfig: 35 99 01
 # description: Autobooter robotic software startup
 # processname: Autobooter
@@ -18,7 +18,8 @@ fi
 
 # Some .sh equivalent stuff of environment in
 # lt_environment.csh
-PATH=${PATH}":/usr/java/jdk1.5.0_19/bin"
+#PATH=${PATH}":/usr/java/jdk1.5.0_19/bin"
+PATH=${PATH}":/usr/java/jdk1.6.0_31/bin"
 CLASSPATH="."
 list=`ls /icc/bin/javalib/*.jar`
 for i in $list; do
@@ -58,6 +59,9 @@ fi
 exit 0
 #
 # $Log: not supported by cvs2svn $
+# Revision 1.6  2011/02/14 11:16:19  cjm
+# Added chkconfig support.
+#
 # Revision 1.5  2009/10/20 18:34:09  cjm
 # Downgraded Java to 1.5.0 u19 - 1.6 caused CONFIG to fail with NULLPointerException.
 #
