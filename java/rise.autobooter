@@ -5,12 +5,12 @@
 # chkconfig: 345 90 10
 # description: Autobooter system for RISE robotic control system
 # pidfile: 
-#ident	"$Id: rise.autobooter,v 1.1 2010-10-07 13:25:14 cjm Exp $"
-# $Header: /home/cjm/cvs/autobooter/java/rise.autobooter,v 1.1 2010-10-07 13:25:14 cjm Exp $
+#ident	"$Id: rise.autobooter,v 1.2 2012-11-12 15:48:45 cjm Exp $"
+# $Header: /home/cjm/cvs/autobooter/java/rise.autobooter,v 1.2 2012-11-12 15:48:45 cjm Exp $
 
-AUTOBOOTER_HOME=/home/dev/bin/autobooter/java
-AUTOBOOTER_CONF=/home/dev/bin/autobooter/java/autobooter.properties
-AUTOBOOTER_PIDFILE=/home/dev/bin/autobooter/java/autobooter.pid
+AUTOBOOTER_HOME=/icc/bin/autobooter/java
+AUTOBOOTER_CONF=/icc/bin/autobooter/java/autobooter.properties
+AUTOBOOTER_PIDFILE=/icc/bin/autobooter/java/autobooter.pid
 if [ ! -f ${AUTOBOOTER_CONF} ]; then
 	echo "AutoBooter: Configuration filename ${AUTOBOOTER_CONF} not found."
 	exit 0
@@ -19,12 +19,14 @@ fi
 # Some .sh equivalent stuff of environment in
 # lt_environment.csh
 CLASSPATH="."
-list=`ls /home/dev/bin/javalib/*.jar`
+list=`ls /icc/bin/javalib/*.jar`
 for i in $list; do
     CLASSPATH=${CLASSPATH}":"$i
 done
-
-LD_LIBRARY_PATH=/home/dev/bin/lib/${HOSTTYPE}:/home/dev/bin/estar/lib/${HOSTTYPE}
+# Hosttype is 'i686' according to machine, we need i386-linux
+HOSTTYPE=i386-linux
+LD_LIBRARY_PATH=/icc/bin/lib/${HOSTTYPE}:/icc/bin/estar/lib/${HOSTTYPE}
+export HOSTTYPE
 export CLASSPATH 
 export LD_LIBRARY_PATH
 
@@ -33,7 +35,7 @@ start)
 	/bin/rm -f ${AUTOBOOTER_PIDFILE}
 	cd ${AUTOBOOTER_HOME}
 	echo "AutoBooter start."
-	java AutoBooter 1> output.txt 2>&1 &
+	java AutoBooter -config ${AUTOBOOTER_CONF} 1> output.txt 2>&1 &
 	echo $! > ${AUTOBOOTER_PIDFILE}
 	;;
 stop)
