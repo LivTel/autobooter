@@ -1,5 +1,5 @@
 # Makefile
-# $Header: /home/cjm/cvs/autobooter/java/Makefile,v 0.24 2012-11-12 15:50:21 cjm Exp $ 
+# $Header: /home/cjm/cvs/autobooter/java/Makefile,v 0.25 2013-11-27 12:16:32 cjm Exp $ 
 include ../../Makefile.common
 include	../Makefile.common
 
@@ -21,7 +21,7 @@ CONFIG_SRCS	= ltccd1.autobooter.properties ltccd2.autobooter.properties ltccd3.a
 		rise.autobooter.properties ringo1.autobooter.properties ringo2.autobooter.properties \
 		tiptilt1.autobooter.properties thor.autobooter.properties micc1.autobooter.properties \
 		o1.autobooter.properties ringo3.autobooter.properties ringo3-1.autobooter.properties \
-		ringo3-2.autobooter.properties
+		ringo3-2.autobooter.properties ioi1.autobooter.properties iuaccaag.autobooter.properties
 CONFIG_OBJS	= $(CONFIG_SRCS:%.properties=$(BINDIR)/%.properties)
 SCRIPT_SRCS  	= ltccd1.autobooter ltccd2.autobooter ltccd3.autobooter \
 		ftccd1.autobooter ftccd2.autobooter \
@@ -29,7 +29,7 @@ SCRIPT_SRCS  	= ltccd1.autobooter ltccd2.autobooter ltccd3.autobooter \
 		spectrograph.autobooter nuview1.autobooter ratcam1.autobooter autoguider1.autobooter \
 		frodospec1.autobooter estar6.autobooter datared.autobooter rise.autobooter ringo1.autobooter \
 		ringo2.autobooter tiptilt1.autobooter thor.autobooter micc1.autobooter o1.autobooter \
-		ringo3.autobooter ringo3-1.autobooter ringo3-2.autobooter 
+		ringo3.autobooter ringo3-1.autobooter ringo3-2.autobooter ioi1.autobooter iuaccaag.autobooter
 SCRIPT_OBJS	= $(SCRIPT_SRCS:%=$(BINDIR)/%)
 
 top: $(OBJS) config scripts docs
@@ -68,6 +68,9 @@ backup: tidy
 
 #
 # $Log: not supported by cvs2svn $
+# Revision 0.24  2012/11/12 15:50:21  cjm
+# Added ringo3-1 and ringo3-2.
+#
 # Revision 0.23  2011/11/23 11:07:19  cjm
 # Added o1 configs.
 #
