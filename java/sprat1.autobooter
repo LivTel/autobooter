@@ -4,7 +4,7 @@
 #
 # chkconfig: 35 99 01
 # description: Starts and stops robotic control software
-# ident	"$Id: sprat1.autobooter,v 1.1 2014-02-20 13:28:57 cjm Exp $"
+# ident	"$Id: sprat1.autobooter,v 1.2 2014-08-26 15:17:12 cjm Exp $"
 
 AUTOBOOTER_HOME=/icc/bin/autobooter/java
 AUTOBOOTER_CONF=/icc/bin/autobooter/java/autobooter.properties
@@ -29,7 +29,10 @@ export HOSTTYPE
 export PATH
 export CLASSPATH 
 export LD_LIBRARY_PATH
-
+#
+# unlimit core dumps
+#
+ulimit -c unlimited
 case "$1" in
 start)
 	/bin/rm -f ${AUTOBOOTER_PIDFILE}
@@ -56,4 +59,7 @@ fi
 exit 0
 #
 # $Log: not supported by cvs2svn $
+# Revision 1.1  2014/02/20 13:28:57  cjm
+# Initial revision
+#
 #
