@@ -2,8 +2,8 @@
 #
 # Liverpool John Moores University
 #
-#ident	"$Id: frodospec1.frodospec.autobooter,v 1.1 2014-08-27 13:41:55 cjm Exp $"
-# $Header: /home/cjm/cvs/autobooter/java/frodospec1.frodospec.autobooter,v 1.1 2014-08-27 13:41:55 cjm Exp $
+#ident	"$Id: frodospec1.frodospec.autobooter,v 1.2 2014-08-27 13:47:03 cjm Exp $"
+# $Header: /home/cjm/cvs/autobooter/java/frodospec1.frodospec.autobooter,v 1.2 2014-08-27 13:47:03 cjm Exp $
 # chkconfig: 35 99 01
 # description: Autobooter robotic software startup
 # processname: Autobooter
@@ -37,12 +37,12 @@ case "$1" in
 start)
 	/bin/rm -f ${AUTOBOOTER_PIDFILE}
 	cd ${AUTOBOOTER_HOME}
-	echo "AutoBooter start."
-	java AutoBooter -co ${AUTOBOOTER_CONF} 1> /icc/log/frodospec_autobooter_output.txt 2>&1 &
+	echo "Frodospec AutoBooter start."
+	java -DFrodospecAutoBooter AutoBooter -co ${AUTOBOOTER_CONF} 1> /icc/log/frodospec_autobooter_output.txt 2>&1 &
 	echo $! > ${AUTOBOOTER_PIDFILE}
 	;;
 stop)
-	echo "AutoBooter stop."
+	echo "Frodospec AutoBooter stop."
 	PID=`cat ${AUTOBOOTER_PIDFILE}`
 	kill ${PID}
 	;;
@@ -59,6 +59,9 @@ fi
 exit 0
 #
 # $Log: not supported by cvs2svn $
+# Revision 1.1  2014/08/27 13:41:55  cjm
+# Initial revision
+#
 # Revision 1.7  2012/08/02 10:52:42  cjm
 # Installed new Java.
 #
