@@ -4,7 +4,7 @@
 #
 # chkconfig: 35 99 01
 # description: Starts and stops robotic control software
-#ident	"$Id: lotus2.lotus.autobooter,v 1.1 2015-06-26 13:44:05 cjm Exp $"
+#ident	"$Id: lotus2.lotus.autobooter,v 1.2 2015-06-26 13:48:52 cjm Exp $"
 
 AUTOBOOTER_HOME=/icc/bin/autobooter/java
 AUTOBOOTER_CONF=/icc/bin/autobooter/java/lotus.autobooter.properties
@@ -32,6 +32,11 @@ export LD_LIBRARY_PATH
 
 case "$1" in
 start)
+	echo "indiserver start"
+	su eng -c "/usr/bin/indiserver -p 7264 /usr/bin/indi_sx_ccd"  1> /icc/log/indiserver_log.txt 2>&1 &
+	# We must wait for the indiserver to set itself up, before starting the AutoBotter, which will start
+	# the LOTUS robotic software, which will try and talk to the indiserver.
+	/bin/sleep 10
 	/bin/rm -f ${AUTOBOOTER_PIDFILE}
 	cd ${AUTOBOOTER_HOME}
 	echo "AutoBooter start."
@@ -56,6 +61,9 @@ fi
 exit 0
 #
 # $Log: not supported by cvs2svn $
+# Revision 1.1  2015/06/26 13:44:05  cjm
+# Initial revision
+#
 # Revision 1.2  2015/06/22 14:39:14  cjm
 # AutoBooter Java software now uses /usr/bin/java as per Ubunto Oracle JVM install.
 #
