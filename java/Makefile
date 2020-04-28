@@ -1,5 +1,5 @@
 # Makefile
-# $Header: /home/cjm/cvs/autobooter/java/Makefile,v 0.26 2015-06-09 13:40:35 cjm Exp $ 
+# $Header: /home/cjm/cvs/autobooter/java/Makefile,v 0.27 2020-04-28 15:01:33 cjm Exp $ 
 include ../../Makefile.common
 include	../Makefile.common
 
@@ -24,7 +24,8 @@ CONFIG_SRCS	= ltccd1.autobooter.properties ltccd2.autobooter.properties ltccd3.a
 		ringo3-2.autobooter.properties iucaaag.autobooter.properties \
 		frodospec1.frodospec.autobooter.properties frodospec1.sprat.autobooter.properties \
 		sprat1.sprat.autobooter.properties ioi1.sprat.autobooter.properties ioi1.ioi.autobooter.properties \
-		lotus1.lotus.autobooter.properties
+		lotus1.lotus.autobooter.properties lotus2.lotus.autobooter.properties moptop1.autobooter.properties \
+		moptop2.autobooter.properties
 #sprat1.autobooter.properties frodospec1.autobooter.properties ioi1.autobooter.properties 
 CONFIG_OBJS	= $(CONFIG_SRCS:%.properties=$(BINDIR)/%.properties)
 SCRIPT_SRCS  	= ltccd1.autobooter ltccd2.autobooter ltccd3.autobooter \
@@ -35,7 +36,8 @@ SCRIPT_SRCS  	= ltccd1.autobooter ltccd2.autobooter ltccd3.autobooter \
 		ringo2.autobooter tiptilt1.autobooter thor.autobooter micc1.autobooter o1.autobooter \
 		ringo3.autobooter ringo3-1.autobooter ringo3-2.autobooter ioi1.autobooter iucaaag.autobooter \
 		frodospec1.frodospec.autobooter frodospec1.sprat.autobooter sprat1.sprat.autobooter \
-		ioi1.sprat.autobooter ioi1.ioi.autobooter lotus1.lotus.autobooter
+		ioi1.sprat.autobooter ioi1.ioi.autobooter lotus1.lotus.autobooter lotus2.lotus.autobooter moptop1.autobooter \
+		moptop2.autobooter
 #frodospec1.autobooter sprat1.autobooter
 SCRIPT_OBJS	= $(SCRIPT_SRCS:%=$(BINDIR)/%)
 
@@ -75,6 +77,9 @@ backup: tidy
 
 #
 # $Log: not supported by cvs2svn $
+# Revision 0.26  2015/06/09 13:40:35  cjm
+# Added LOTUS configs.
+#
 # Revision 0.25  2013/11/27 12:16:32  cjm
 # Addded iuaccaag.
 #
