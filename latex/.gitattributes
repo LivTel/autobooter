@@ -1,0 +1,7 @@
+Makefile filter=rcs-keywords
+Makefile.common filter=rcs-keywords
+*.java filter=rcs-keywords
+*.autobooter filter=rcs-keywords
+*.properties filter=rcs-keywords
+*.tex filter=rcs-keywords
+*.fig filter=rcs-keywords
