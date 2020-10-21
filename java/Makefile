@@ -3,6 +3,8 @@
 include ../../Makefile.common
 include	../Makefile.common
 
+# We need no later than Java 1.6 for Sprat
+AB_JAVAC_OPTIONS= -source 1.6 -target 1.6
 BINDIR 		= $(AB_BIN_HOME)/java
 DOCSDIR 	= $(AB_DOC_HOME)/javadocs
 DOCFLAGS 	= -version -author -private
@@ -44,7 +46,7 @@ SCRIPT_OBJS	= $(SCRIPT_SRCS:%=$(BINDIR)/%)
 top: $(OBJS) config scripts docs
 
 $(BINDIR)/%.class:%.java
-	$(JAVAC) $(JAVAC_OPTIONS) -d $(BINDIR) $<
+	$(JAVAC) $(JAVAC_OPTIONS) $(AB_JAVAC_OPTIONS) -d $(BINDIR) $<
 
 config: $(CONFIG_OBJS)
 
