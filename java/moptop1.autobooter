@@ -2,7 +2,7 @@
 #
 # Liverpool John Moores University
 #
-#ident	"$Id: moptop1.autobooter,v 1.1 2020-04-28 14:58:44 cjm Exp $
+#ident	"$Id$
 # chkconfig: 35 99 01
 # description: Autobooter robotic software startup
 # processname: Autobooter

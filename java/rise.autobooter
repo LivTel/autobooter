@@ -5,7 +5,7 @@
 # chkconfig: 345 90 10
 # description: Autobooter system for RISE robotic control system
 # pidfile: 
-#ident	"$Id: rise.autobooter,v 1.2 2012-11-12 15:48:45 cjm Exp $"
+#ident	"$Id$"
 # $Header: /home/cjm/cvs/autobooter/java/rise.autobooter,v 1.2 2012-11-12 15:48:45 cjm Exp $
 
 AUTOBOOTER_HOME=/icc/bin/autobooter/java

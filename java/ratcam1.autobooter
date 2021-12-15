@@ -2,7 +2,7 @@
 #
 # Liverpool John Moores University
 #
-#ident	"$Id: ratcam1.autobooter,v 1.2 2007-04-04 13:55:28 cjm Exp $"
+#ident	"$Id$"
 
 AUTOBOOTER_HOME=/icc/bin/autobooter/java
 AUTOBOOTER_CONF=/icc/bin/autobooter/java/autobooter.properties

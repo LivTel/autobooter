@@ -2,7 +2,7 @@
 #
 # Liverpool John Moores University
 #
-#ident	"$Id: ringo1.autobooter,v 1.1 2010-10-07 13:25:14 cjm Exp $"
+#ident	"$Id$"
 
 AUTOBOOTER_HOME=/icc/bin/autobooter/java
 AUTOBOOTER_CONF=/icc/bin/autobooter/java/autobooter.properties

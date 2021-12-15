@@ -2,7 +2,7 @@
 #
 # Liverpool John Moores University
 #
-#ident	"$Id: supircam1.autobooter,v 1.1 2006-11-20 19:07:49 cjm Exp $"
+#ident	"$Id$"
 
 AUTOBOOTER_HOME=/icc/bin/autobooter/java
 AUTOBOOTER_CONF=/icc/bin/autobooter/java/autobooter.properties

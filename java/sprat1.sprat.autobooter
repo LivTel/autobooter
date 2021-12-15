@@ -4,7 +4,7 @@
 #
 # chkconfig: 35 99 01
 # description: Starts and stops robotic control software
-# ident	"$Id: sprat1.sprat.autobooter,v 1.1 2014-09-02 13:32:36 cjm Exp $"
+# ident	"$Id$"
 
 AUTOBOOTER_HOME=/icc/bin/autobooter/java
 AUTOBOOTER_CONF=/icc/bin/autobooter/java/autobooter.properties

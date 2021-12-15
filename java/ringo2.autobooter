@@ -2,7 +2,7 @@
 #
 # Liverpool John Moores University
 #
-#ident	"$Id: ringo2.autobooter,v 1.2 2011-02-14 11:16:39 cjm Exp $"
+#ident	"$Id$"
 # chkconfig: 35 99 01
 # description: Autobooter robotic software startup
 # processname: Autobooter
