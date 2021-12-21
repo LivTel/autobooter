@@ -27,7 +27,7 @@ CONFIG_SRCS	= ltccd1.autobooter.properties ltccd2.autobooter.properties ltccd3.a
 		frodospec1.frodospec.autobooter.properties frodospec1.sprat.autobooter.properties \
 		sprat1.sprat.autobooter.properties ioi1.sprat.autobooter.properties ioi1.ioi.autobooter.properties \
 		lotus1.lotus.autobooter.properties lotus2.lotus.autobooter.properties moptop1.autobooter.properties \
-		moptop2.autobooter.properties moptop3.autobooter.properties 
+		moptop2.autobooter.properties moptop3.autobooter.properties moptop4.autobooter.properties 
 #sprat1.autobooter.properties frodospec1.autobooter.properties ioi1.autobooter.properties 
 CONFIG_OBJS	= $(CONFIG_SRCS:%.properties=$(BINDIR)/%.properties)
 SCRIPT_SRCS  	= ltccd1.autobooter ltccd2.autobooter ltccd3.autobooter \
@@ -39,7 +39,7 @@ SCRIPT_SRCS  	= ltccd1.autobooter ltccd2.autobooter ltccd3.autobooter \
 		ringo3.autobooter ringo3-1.autobooter ringo3-2.autobooter ioi1.autobooter iucaaag.autobooter \
 		frodospec1.frodospec.autobooter frodospec1.sprat.autobooter sprat1.sprat.autobooter \
 		ioi1.sprat.autobooter ioi1.ioi.autobooter lotus1.lotus.autobooter lotus2.lotus.autobooter \
-		moptop1.autobooter moptop2.autobooter moptop3.autobooter
+		moptop1.autobooter moptop2.autobooter moptop3.autobooter moptop4.autobooter
 #frodospec1.autobooter sprat1.autobooter
 SCRIPT_OBJS	= $(SCRIPT_SRCS:%=$(BINDIR)/%)
 
