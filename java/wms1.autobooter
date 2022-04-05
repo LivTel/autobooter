@@ -1,0 +1,57 @@
+#!/bin/sh
+#
+# Liverpool John Moores University
+#
+# chkconfig: 35 99 01
+# description: Autobooter robotic software startup
+# processname: Autobooter
+AUTOBOOTER_HOME=/wms_qli50_wxt536/bin/autobooter/java
+AUTOBOOTER_CONF=/wms_qli50_wxt536/bin/autobooter/java/autobooter.properties
+AUTOBOOTER_PIDFILE=/wms_qli50_wxt536/bin/autobooter/java/autobooter.pid
+if [ ! -f ${AUTOBOOTER_CONF} ]; then
+	echo "AutoBooter: Configuration filename ${AUTOBOOTER_CONF} not found."
+	exit 0
+fi
+
+# Some .sh equivalent stuff of environment in
+# lt_environment.csh
+# java is in /usr/bin
+#PATH=${PATH}":/usr/java/j2sdk1.4.2_03/bin"
+CLASSPATH="."
+list=`ls /wms_qli50_wxt536/bin/javalib/*.jar`
+for i in $list; do
+    CLASSPATH=${CLASSPATH}":"$i
+done
+HOSTTYPE=x86_64-linux
+LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/wms_qli50_wxt536/bin/lib/${HOSTTYPE}
+export HOSTTYPE
+export PATH
+export CLASSPATH 
+export LD_LIBRARY_PATH
+# Enable to core dumping
+ulimit -c unlimited
+
+case "$1" in
+start)
+	/bin/rm -f ${AUTOBOOTER_PIDFILE}
+	cd ${AUTOBOOTER_HOME}
+	echo "AutoBooter start."
+	java AutoBooter -co ${AUTOBOOTER_CONF} 1> /wms_qli50_wxt536/log/autobooter_output.txt 2>&1 &
+	echo $! > ${AUTOBOOTER_PIDFILE}
+	;;
+stop)
+	echo "AutoBooter stop."
+	PID=`cat ${AUTOBOOTER_PIDFILE}`
+	kill ${PID}
+	;;
+*)
+	echo "Usage: $0 {start|stop}"
+	exit 1
+	;;
+esac
+
+if [ $? != 0 ]; then
+	echo "$status"
+	exit 1
+fi
+exit 0
