@@ -4,7 +4,7 @@
 #
 # chkconfig: 35 99 01
 # description: Starts and stops robotic control software
-# ident	"$Id: ioi1.sprat.autobooter,v 1.1 2014-09-02 13:32:36 cjm Exp $"
+# ident	"$Id: ioi1.sprat.autobooter | Tue Sep 2 13:32:36 2014 +0000 | Chris Mottram  $"
 
 AUTOBOOTER_HOME=/icc/bin/autobooter/java
 AUTOBOOTER_CONF=/icc/bin/autobooter/java/sprat.autobooter.properties
@@ -38,7 +38,7 @@ start)
 	/bin/rm -f ${AUTOBOOTER_PIDFILE}
 	cd ${AUTOBOOTER_HOME}
 	echo "Sprat AutoBooter start."
-	java -DSpratAutoBooter AutoBooter -co ${AUTOBOOTER_CONF} 1> /icc/log/sprat_autobooter_output.txt 2>&1 &
+	su eng -c "java -DSpratAutoBooter AutoBooter -co ${AUTOBOOTER_CONF}" 1> /icc/log/sprat_autobooter_output.txt 2>&1 &
 	echo $! > ${AUTOBOOTER_PIDFILE}
 	;;
 stop)
