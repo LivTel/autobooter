@@ -18,7 +18,8 @@ CONFIG_SRCS	= ltccd1.autobooter.properties ltccd2.autobooter.properties ltccd3.a
 		ftccd1.autobooter.properties ftccd2.autobooter.properties \
 		spectrograph.autobooter.properties supircam1.autobooter.properties supircam2.autobooter.properties \
 		ftspec1.autobooter.properties ftspec2.autobooter.properties \
-		nuview1.autobooter.properties ratcam1.autobooter.properties autoguider1.autobooter.properties \
+		nuview1.autobooter.properties ratcam1.autobooter.properties \
+		autoguider1.autobooter.properties autoguider2.autobooter.properties \
 		estar6.autobooter.properties datared.autobooter.properties \
 		rise.autobooter.properties ringo1.autobooter.properties ringo2.autobooter.properties \
 		tiptilt1.autobooter.properties thor.autobooter.properties micc1.autobooter.properties \
@@ -34,7 +35,8 @@ CONFIG_OBJS	= $(CONFIG_SRCS:%.properties=$(BINDIR)/%.properties)
 SCRIPT_SRCS  	= ltccd1.autobooter ltccd2.autobooter ltccd3.autobooter \
 		ftccd1.autobooter ftccd2.autobooter \
 		supircam1.autobooter supircam2.autobooter ftspec1.autobooter ftspec2.autobooter \
-		spectrograph.autobooter nuview1.autobooter ratcam1.autobooter autoguider1.autobooter \
+		spectrograph.autobooter nuview1.autobooter ratcam1.autobooter \
+		autoguider1.autobooter autoguider2.autobooter \
 		estar6.autobooter datared.autobooter rise.autobooter ringo1.autobooter \
 		ringo2.autobooter tiptilt1.autobooter thor.autobooter micc1.autobooter o1.autobooter \
 		ringo3.autobooter ringo3-1.autobooter ringo3-2.autobooter ioi1.autobooter iucaaag.autobooter \
