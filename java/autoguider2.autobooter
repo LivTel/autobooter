@@ -26,7 +26,7 @@ for i in $list; do
     CLASSPATH=${CLASSPATH}":"$i
 done
 
-HOSTTYPE=i386-linux
+HOSTTYPE=x86_64-linux
 LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/icc/bin/lib/${HOSTTYPE}
 export HOSTTYPE
 export PATH
