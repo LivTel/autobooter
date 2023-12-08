@@ -44,6 +44,8 @@ case "$1" in
 start)
 	/bin/rm -f ${AUTOBOOTER_PIDFILE}
 	cd ${AUTOBOOTER_HOME}
+	echo "Autobooter: Wait for 10 seconds for the /icc/tmp mount point to be mounted..."
+	sleep 10
 	echo "AutoBooter start."
 	java AutoBooter -co ${AUTOBOOTER_CONF} 1> /icc/log/autobooter_output.txt 2>&1 &
 	echo $! > ${AUTOBOOTER_PIDFILE}
