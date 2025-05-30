@@ -1,5 +1,6 @@
 [Unit]
 Description=Liric robotic control system AutoBooter process
+RequiresMountsFor=/icc/tmp
 After=network.target
 
 [Service]
