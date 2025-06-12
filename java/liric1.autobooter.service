@@ -4,8 +4,8 @@ RequiresMountsFor=/icc/tmp
 After=network.target
 
 [Service]
-ExecStart=java AutoBooter -co /icc/bin/autobooter/java/autobooter.properties 1> /icc/log/autobooter_output.txt 2>&1 &
-Type=exec
+Type=simple
+ExecStart=/usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java AutoBooter -co /icc/bin/autobooter/java/autobooter.properties
 Restart=on-failure
 Environment="PATH=/usr/bin/:/usr/lib/jvm/java-8-openjdk-amd64/jre/bin/"
 Environment="LD_LIBRARY_PATH=/icc/bin/lib/x86_64-linux"
