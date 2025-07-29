@@ -46,8 +46,10 @@ SCRIPT_SRCS  	= ltccd1.autobooter ltccd2.autobooter ltccd3.autobooter \
 		liric1.autobooter
 #frodospec1.autobooter sprat1.autobooter
 SCRIPT_OBJS	= $(SCRIPT_SRCS:%=$(BINDIR)/%)
+SERVICE_SRCS	= liric1.autobooter.service
+SERVICE_OBJS	= $(SERVICE_SRCS:%=$(BINDIR)/%)
 
-top: $(OBJS) config scripts docs
+top: $(OBJS) config scripts services docs
 
 $(BINDIR)/%.class:%.java
 	$(JAVAC) $(JAVAC_OPTIONS) $(AB_JAVAC_OPTIONS) -d $(BINDIR) $<
@@ -61,6 +63,12 @@ scripts: $(SCRIPT_OBJS)
 
 $(BINDIR)/%.autobooter: %.autobooter
 	$(CP) -f $< $@
+
+services: $(SERVICE_OBJS)
+
+$(BINDIR)/%.service: %.service
+	$(CP) -f $< $@
+
 
 docs: $(DOCS)
 
