@@ -1,0 +1,17 @@
+[Unit]
+Description=Liric robotic control system AutoBooter process
+RequiresMountsFor=/icc/tmp
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java AutoBooter -co /icc/bin/autobooter/java/autobooter.properties
+Restart=on-failure
+Environment="PATH=/usr/bin/:/usr/lib/jvm/java-8-openjdk-amd64/jre/bin/"
+Environment="LD_LIBRARY_PATH=/icc/bin/lib/x86_64-linux"
+Environment="CLASSPATH=.:/icc/bin/javalib/ngat_fits.jar:/icc/bin/javalib/ngat_liric.jar:/icc/bin/javalib/ngat_message_base.jar:/icc/bin/javalib/ngat_message_inst_dp.jar:/icc/bin/javalib/ngat_message_iss_inst.jar:/icc/bin/javalib/ngat_net.jar:/icc/bin/javalib/ngat_phase2.jar:/icc/bin/javalib/ngat_sound.jar:/icc/bin/javalib/ngat_swing.jar:/icc/bin/javalib/ngat_util.jar:/icc/bin/javalib/ngat_util_logging.jar"
+WorkingDirectory=/icc/bin/autobooter/java
+
+[Install]
+WantedBy=multi-user.target
+

@@ -29,7 +29,7 @@ CONFIG_SRCS	= ltccd1.autobooter.properties ltccd2.autobooter.properties ltccd3.a
 		sprat1.sprat.autobooter.properties ioi1.sprat.autobooter.properties ioi1.ioi.autobooter.properties \
 		lotus1.lotus.autobooter.properties lotus2.lotus.autobooter.properties moptop1.autobooter.properties \
 		moptop2.autobooter.properties moptop3.autobooter.properties moptop4.autobooter.properties \
-		wms1.autobooter.properties liric1.autobooter.properties
+		wms1.autobooter.properties liric1.autobooter.properties liric2.autobooter.properties
 #sprat1.autobooter.properties frodospec1.autobooter.properties ioi1.autobooter.properties 
 CONFIG_OBJS	= $(CONFIG_SRCS:%.properties=$(BINDIR)/%.properties)
 SCRIPT_SRCS  	= ltccd1.autobooter ltccd2.autobooter ltccd3.autobooter \
@@ -46,7 +46,7 @@ SCRIPT_SRCS  	= ltccd1.autobooter ltccd2.autobooter ltccd3.autobooter \
 		liric1.autobooter
 #frodospec1.autobooter sprat1.autobooter
 SCRIPT_OBJS	= $(SCRIPT_SRCS:%=$(BINDIR)/%)
-SERVICE_SRCS	= liric1.autobooter.service
+SERVICE_SRCS	= liric1.autobooter.service liric2.autobooter.service
 SERVICE_OBJS	= $(SERVICE_SRCS:%=$(BINDIR)/%)
 
 top: $(OBJS) config scripts services docs
